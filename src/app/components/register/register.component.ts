@@ -1,6 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { ApiService } from 'src/app/services/api/api.service';
+import { Router } from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material';
+import { Country } from 'src/app/classes/country/country';
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-register',
@@ -10,15 +21,26 @@ import { ApiService } from 'src/app/services/api/api.service';
 
 export class RegisterComponent implements OnInit {
 
-  Contries: any = ['Cameroon', 'Nigeria', 'Gabon'];
+  countries: Country[];
 
   control: FormControl;
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService) { }
+  matcher
+
+
+  selectedValue: String = '';
+
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) {
+    this.api.getCountry().then(countries => {
+      this.countries = countries
+    })
+  }
 
   ngOnInit() {
-    this.control = this.formBuilder.control('', Validators.required);
+    this.matcher = new MyErrorStateMatcher();
+    // this.selectedValue = this.Countries[0]
+
     this.form = this.formBuilder.group({
       pseudo: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -30,18 +52,15 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(customerData) {
     // Process checkout data here
-    if (this.form.valid) {
-      this.api.register(customerData).then(
-        (value) => {
-          console.log(value)
-          this.form.reset();
-        }
-      ).catch(err => {
-        console.log(err)
-      })
-    } else {
-      console.log("Not valid form")
-    }
-
+    console.log(customerData)
+    this.api.register(customerData).then(
+      (value) => {
+        console.log(value)
+        this.router.navigate(["/verified"])
+        this.form.reset();
+      }
+    ).catch(err => {
+      console.log(err)
+    })
   }
 }

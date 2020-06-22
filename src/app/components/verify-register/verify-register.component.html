@@ -1,0 +1,20 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+        <mat-card-header>
+            <mat-card-title>Verification de Votre Code</mat-card-title>
+        </mat-card-header>
+        <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+            <mat-card-content>
+                <mat-form-field class="example-full-width">
+                    <input matInput placeholder="Token" formControlName="token">
+                </mat-form-field>
+                <mat-hint>Vous avez reçu ce code par mail</mat-hint>
+            </mat-card-content>
+            <!--  (button tooltip) -->
+            <button mat-stroked-button matTooltip="Vous avez reçu ce code par mail"
+                [matTooltipShowDelay]="showDelay.value" [matTooltipHideDelay]="hideDelay.value" color="accent"
+                class="btn-block" [disabled]="!form.valid">Verified</button>
+
+        </form>
+    </mat-card>
+</div>

@@ -20,10 +20,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { LogInComponent } from './components/log-in/log-in.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ControlErrorComponent } from './components/control-error/control-error.component';
-import { ControlErrorsDirective } from './directives/control-errors.directive';
-import { ControlErrorContainerDirective } from './directives/control-error-container.directive';
-import { FormSubmitDirective } from './directives/form-submit.directive';
+import { VerifyRegisterComponent } from './components/verify-register/verify-register.component'
 
 
 @NgModule({
@@ -33,10 +30,7 @@ import { FormSubmitDirective } from './directives/form-submit.directive';
     RegisterComponent,
     RegisterComponent,
     LogInComponent,
-    ControlErrorComponent,
-    ControlErrorContainerDirective,
-    FormSubmitDirective,
-    ControlErrorsDirective,
+    VerifyRegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +45,6 @@ import { FormSubmitDirective } from './directives/form-submit.directive';
   providers: [],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  entryComponents: [ControlErrorComponent, ]
 })
 
 export class AppModule { }

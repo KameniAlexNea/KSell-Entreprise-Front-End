@@ -4,36 +4,67 @@
       <mat-card-title>Register</mat-card-title>
     </mat-card-header>
 
-    <form class="example-form" [formGroup]="form">
+    <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
 
       <mat-card-content>
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Username" formControlName="pseudo">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Email" formControlName="mail">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" formControlName="password">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <input type="date" matInput placeholder="DateNaissance" formControlName="dateNaissance">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <mat-label>Choose a country...</mat-label>
-          <mat-select [(value)]="selected" formControlName="pays">
-            <mat-option [value]="roles" *ngFor="let country of Contries">{{country}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
+        <mat-grid-list cols="2" rowHeight="2:1">
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Pseudo" formControlName="pseudo" [errorStateMatcher]="matcher">
+              <mat-hint>taille min 5!</mat-hint>
+              <mat-error *ngIf="!form.controls['pseudo'].hasError('required')">
+                La taille minimale c'est 5 comme pseudo
+              </mat-error>
+              <mat-error *ngIf="form.controls['pseudo'].hasError('required')">
+                Pseudo is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email" formControlName="mail" [errorStateMatcher]="matcher">
+              <mat-error *ngIf="form.controls['mail'].hasError('email') && !form.controls['mail'].hasError('required')">
+                Svp entrer une email valide
+              </mat-error>
+              <mat-error *ngIf="form.controls['mail'].hasError('required')">
+                Email est <strong>obligatoire</strong>
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Password" formControlName="password" [errorStateMatcher]="matcher">
+              <mat-hint>taille min 8</mat-hint>
+              <mat-error *ngIf="!form.controls['password'].hasError('required')">
+                La taille min est de 8
+              </mat-error>
+              <mat-error *ngIf="form.controls['password'].hasError('required')">
+                La mot de passe est <strong>obligatoire</strong>
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field class="example-full-width">
+              <input type="date" matInput placeholder="Date de Naissance" formControlName="dateNaissance"
+                [errorStateMatcher]="matcher" [matDatepicker]="picker">
+              <mat-error *ngIf="form.controls['dateNaissance'].hasError('required')">
+                La date de naissance est <strong>obligatoire</strong>
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <mat-grid-list cols="2" rowHeight="1:1">
+          <mat-form-field class="example-full-width">
+            <mat-label>Choix du pays...</mat-label>
+            <mat-select formControlName="pays" [errorStateMatcher]="matcher">
+              <mat-option *ngFor="let country of countries" [value]="country.text">{{country.text}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-grid-list>
+        <!-- [(value)]="selectedValue" -->
       </mat-card-content>
-
-      <button mat-stroked-button color="accent" class="btn-block">Register</button>
+      <button mat-stroked-button color="accent" class="btn-block" [disabled]="!form.valid">Register</button>
 
     </form>
   </mat-card>
